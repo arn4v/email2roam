@@ -58,7 +58,15 @@ imap.once("ready", () => {
         msg.on("body", function (stream, info) {
           streamToString(stream).then((data) => {
             const dailyNoteUid = api.dailyNoteUid();
-            api.createBlock(msg, dailyNoteUid);
+            console.log(dailyNoteUid);
+            api
+              .logIn()
+              .then(() => {
+                api
+                  .createBlock(msg, dailyNoteUid)
+                  .then(() => console.log("Added to daily notes page"));
+              })
+              .then((result) => api.close());
           });
         });
       });
