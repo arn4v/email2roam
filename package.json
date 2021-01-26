@@ -1,0 +1,21 @@
+{
+  "name": "email2roam",
+  "version": "1.0.0",
+  "description": "",
+  "license": "Apache 2.0",
+  "author": "Arnav Gosain <arnav@arnavgosain.com> (https://arnavgosain.com)",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [],
+  "dependencies": {
+    "dotenv-safe": "^8.2.0",
+    "node-imap": "^0.9.6",
+    "roam-research-private-api": "^0.9.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
