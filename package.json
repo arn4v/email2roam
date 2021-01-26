@@ -2,7 +2,7 @@
   "name": "email2roam",
   "version": "1.0.0",
   "description": "",
-  "license": "Apache 2.0",
+  "license": "MIT",
   "author": "Arnav Gosain <arnav@arnavgosain.com> (https://arnavgosain.com)",
   "main": "index.js",
   "scripts": {
