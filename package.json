@@ -12,8 +12,10 @@
   "keywords": [],
   "dependencies": {
     "dotenv-safe": "^8.2.0",
+    "mailparser": "^3.0.1",
     "node-imap": "^0.9.6",
-    "roam-research-private-api": "^0.9.0"
+    "roam-research-private-api": "^0.9.0",
+    "turndown": "^7.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
