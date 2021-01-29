@@ -1,5 +1,4 @@
 # Email2Roam
----
 Simple NodeJS script that makes use of [Roam-Research-Private-Api](https://github.com/artpi/roam-research-private-api) to add notes to your Daily Page via email.
 
 ### Requirements
