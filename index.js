@@ -3,7 +3,6 @@ const NodeImap = require("node-imap");
 const fs = require("fs");
 const { inspect } = require("util");
 const { simpleParser } = require("mailparser");
-const TurndownService = require("turndown");
 
 require("dotenv-safe").config();
 
@@ -15,6 +14,8 @@ const {
   EMAIL_PASSWORD,
   EMAIL_HOST,
 } = process.env;
+
+let { ALLOWED } = process.env;
 
 const config = {
   imap: {
@@ -28,7 +29,26 @@ const config = {
 
 const imap = new NodeImap(config.imap);
 const api = new RoamApi(ROAM_GRAPH, ROAM_EMAIL, ROAM_PASSWORD);
-const turndownService = new TurndownService();
+if (ALLOWED) ALLOWED = ALLOWED.replace(/\'/g, '"');
+const allowed = ALLOWED ? JSON.parse(ALLOWED) : undefined;
+
+const addBlock = (data) => {
+  const dailyNoteUid = api.dailyNoteUid();
+  api
+    .logIn()
+    .then(() => {
+      console.log("Adding block");
+      return api.createBlock(data, dailyNoteUid);
+    })
+    .then((result) => {
+      console.log("Added block, closing Roam API");
+      api.close();
+    })
+    .catch((err) => {
+      console.log("Unable to add block, error:");
+      console.log(err.toString());
+    });
+};
 
 imap.once("ready", () => {
   console.log("Ready");
@@ -52,29 +72,19 @@ imap.once("ready", () => {
         msg.on("body", function (stream, info) {
           simpleParser(stream)
             .then((data) => {
-              console.log("Parsed email");
-              data.textAsMarkdown = turndownService.turndown(data.textAsHtml);
               let {
                 from: { value: from },
                 text,
-                textAsMarkdown,
               } = data;
               from = from.map((v) => v.address);
-              const dailyNoteUid = api.dailyNoteUid();
-              api
-                .logIn()
-                .then(() => {
-                  console.log("Adding block");
-                  return api.createBlock(text, dailyNoteUid);
-                })
-                .then((result) => {
-                  console.log("Added block, closing Roam API");
-                  api.close();
-                })
-                .catch((err) => {
-                  console.log("Unable to add block, error:");
-                  console.log(err.toString());
-                });
+              if (from.some((v) => allowed.includes(v))) {
+                addBlock(text);
+              } else {
+                console.log(
+                  "Email received from unauthorized address",
+                  from.join(", ")
+                );
+              }
             })
             .catch((err) => err.toString());
         });
