@@ -115,14 +115,6 @@ imap.once("ready", () => {
     if (MODE === 1) {
       imap.search(["UNSEEN"], (err, results) => {
         if (!err && results.length > 0) {
-          // imap.setFlags(results, ["\\Seen"], function (err) {
-          //   if (!err) {
-          //     console.log("marked as read");
-          //   } else {
-          //     console.log(JSON.stringify(err, null, 2));
-          //   }
-          // });
-
           const f = imap.fetch(results, {
             // bodies: "HEADER.FIELDS (FROM TO SUBJECT DATE)",
             bodies: "",
