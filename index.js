@@ -16,7 +16,7 @@ const {
 } = process.env;
 
 /** @type {1 | 2} */
-let MODE = parseInt(process.env.MODE);
+let MODE = parseInt(process.env.E2R_MODE);
 
 let { ALLOWED } = process.env;
 
