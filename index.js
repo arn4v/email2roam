@@ -75,6 +75,9 @@ const getMessages = (f) => {
         .catch((err) => err.toString());
     });
   });
+  f.on("end", () => {
+    imap.end();
+  });
 };
 
 const repo_path = getRepoPath();
@@ -125,6 +128,7 @@ imap.once("ready", () => {
           });
           getMessages(f);
         } else {
+          imap.end();
           return;
         }
       });
