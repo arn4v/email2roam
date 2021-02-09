@@ -17,6 +17,7 @@ const {
 
 /** @type {1 | 2} */
 let MODE = parseInt(process.env.E2R_MODE);
+if (!MODE) MODE = 1;
 
 let { ALLOWED } = process.env;
 
@@ -80,35 +81,6 @@ const getMessages = (f) => {
   });
 };
 
-const repo_path = getRepoPath();
-/** File that stores uidvalidity */
-const uvPath = path.resolve(
-  path.join(repo_path ? repo_path : path.resolve(__dirname), "uidvalidity")
-);
-
-/**
- * Credits: everruler12 https://github.com/everruler12/roam2github/blob/main/roam2github.js#L52
- */
-function getRepoPath() {
-  const ubuntuPath = path.join("/", "home", "runner", "work");
-  const exists = fs.existsSync(ubuntuPath);
-
-  if (exists) {
-    const files = fs.readdirSync(ubuntuPath).filter((f) => !f.startsWith("_")); // filter out [ '_PipelineMapping', '_actions', '_temp', ]
-    if (files.length !== 1) return false;
-    repo_name = files[0];
-    const files2 = fs.readdirSync(path.join(ubuntuPath, repo_name));
-
-    if (files2.length === 1 && files2[0] === repo_name) {
-      return path.join(ubuntuPath, repo_name, repo_name);
-    } else {
-      return false;
-    }
-  } else {
-    return false;
-  }
-}
-
 imap.once("ready", () => {
   console.log("Ready");
   imap.openBox("INBOX", false, (err, box) => {
@@ -135,7 +107,6 @@ imap.once("ready", () => {
     } else {
       imap.on("mail", (num) => {
         const f = imap.seq.fetch(box.messages.total + ":*", {
-          // bodies: ["1"],
           bodies: "",
           struct: true,
           markSeen: true,
