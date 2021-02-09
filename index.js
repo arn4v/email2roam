@@ -44,9 +44,12 @@ const addBlock = async (data) => {
       console.log("Logged in");
       return api.createBlock(data, dailyNoteUid);
     })
-    .then((res) => api.close())
+    .then((result) => {
+      console.log("Added block, closing Roam API");
+      api.close();
+    })
     .catch((err) => {
-      console.log(err);
+      console.log(err.toString());
     });
 };
 
